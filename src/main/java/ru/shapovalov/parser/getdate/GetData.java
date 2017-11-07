@@ -1,4 +1,4 @@
-package ru.shapovalov.getdate;
+package ru.shapovalov.parser.getdate;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

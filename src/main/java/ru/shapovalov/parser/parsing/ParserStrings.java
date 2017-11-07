@@ -1,29 +1,31 @@
-package ru.shapovalov.parsing;
+package ru.shapovalov.parser.parsing;
 
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import ru.shapovalov.Constants;
-import ru.shapovalov.GetXML.GetData;
+import ru.shapovalov.parser.Constants;
+import ru.shapovalov.parser.dao.Product;
+import ru.shapovalov.parser.getdate.GetData;
+
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-
-import static ru.shapovalov.Run.startCollection;
-import static ru.shapovalov.SearchChange.SearchChange.oldIdList;
-import static ru.shapovalov.SearchChange.SearchChange.goodsMap;
 
 
 public class ParserStrings {
     public ParserStrings() {
     }
-
+    public static boolean startCollection = true;
+    public static List<Integer> oldIdList = new ArrayList<>();
+    public static Map<Integer, Product> goodsMap = new HashMap<>();
     public void parserGoods() throws Exception {
         GetData getData = new GetData();
 
@@ -77,16 +79,16 @@ public class ParserStrings {
                         int cntBadresponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
 
                         if (startCollection) {
-                            goodsMap.put(idGoodsInt, new Goods(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
+                            goodsMap.put(idGoodsInt, new Product(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
                                     cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, 0));
                             oldIdList.add(idGoodsInt);
                         } else {
-                            Goods goodsOld = goodsMap.get(idGoodsInt);
+                            Product goodsOld = goodsMap.get(idGoodsInt);
                             if (goodsOld != null) {
-                                goodsMap.put(idGoodsInt, new Goods(idGoodsInt, nameGoodsStr, goodsOld.getPriceOld(), priceDoub,
+                                goodsMap.put(idGoodsInt, new Product(idGoodsInt, nameGoodsStr, goodsOld.getPriceOld(), priceDoub,
                                         cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, 0));
                             } else {
-                                goodsMap.put(idGoodsInt, new Goods(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
+                                goodsMap.put(idGoodsInt, new Product(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
                                         cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, 0));
                             }
 

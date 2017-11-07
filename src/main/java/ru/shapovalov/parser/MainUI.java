@@ -1,4 +1,4 @@
-package ru.shapovalov;
+package ru.shapovalov.parser;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;

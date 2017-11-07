@@ -1,8 +1,4 @@
-package ru.shapovalov.dao;
-
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+package ru.shapovalov.parser.dao;
 
 public class Product {
 
