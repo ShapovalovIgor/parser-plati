@@ -13,8 +13,9 @@ public class MainUI extends UI {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         layout.setMargin(true);
+        PriceTable priceTable = new PriceTable();
 
-        layout.addComponent(new Label("Main UI"));
+        layout.addComponents(new Label("Main UI"), priceTable.getTablePrice());
 
 
         setContent(layout);
