@@ -14,18 +14,16 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class ParserStrings {
     public ParserStrings() {
     }
+
     public static boolean startCollection = true;
-    public static List<Integer> oldIdList = new ArrayList<>();
-    public static Map<Integer, Product> goodsMap = new HashMap<>();
+    public Collection<Product> productCollection = new ArrayList<>();
+
     public void parserGoods() throws Exception {
         GetData getData = new GetData();
 
@@ -40,10 +38,9 @@ public class ParserStrings {
             for (Map.Entry<Integer, Integer> sectionIdAndCountGoods : sectionIdAndCountGoodsMap.entrySet()) {
                 int sectionId = sectionIdAndCountGoods.getKey();
                 int countPages = sectionIdAndCountGoods.getValue();
-                System.out.println(sectionId);
                 for (int page = 1; page <= countPages; page++) {
                     is.setCharacterStream(new StringReader(getData.getNewData(
-                            new URL(Constants.GOODS_URL),
+                            new URL(Constants.URL),
                             Constants.GOODS_1 + sectionId + Constants.GOODS_2 + page + Constants.GOODS_3)));
 
                     Document doc = db.parse(is);
@@ -59,12 +56,18 @@ public class ParserStrings {
 
                         NodeList name_goods = element.getElementsByTagName("name_goods");
                         line = (Element) name_goods.item(0);
-                        String[] nameGoodsStrArray = getCharacterDataFromElement(line).replace("&amp;", "").replace("– ","").replace("–"," ").replace("quot;", "").split("[(,+,/,|,-]");
+                        String[] nameGoodsStrArray = getCharacterDataFromElement(line)
+                                .replace("&amp;", "")
+                                .replace("– ", "")
+                                .replace("–", " ")
+                                .replace("quot;", "")
+                                .split("[(,+,/,|,-]");
                         String nameGoodsStr = nameGoodsStrArray[0];
 
                         NodeList price = element.getElementsByTagName("price");
                         line = (Element) price.item(0);
-                        double priceDoub = Double.valueOf(getCharacterDataFromElement(line).replace(',', '.'));
+                        double priceDoub = Double.valueOf(getCharacterDataFromElement(line)
+                                .replace(',', '.'));
 
                         NodeList cnt_sell = element.getElementsByTagName("cnt_sell");
                         line = (Element) cnt_sell.item(0);
@@ -79,27 +82,19 @@ public class ParserStrings {
                         int cntBadresponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
 
                         if (startCollection) {
-                            goodsMap.put(idGoodsInt, new Product(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
+                            productCollection.add(new Product(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
                                     cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, 0));
-                            oldIdList.add(idGoodsInt);
-                        } else {
-                            Product goodsOld = goodsMap.get(idGoodsInt);
-                            if (goodsOld != null) {
-                                goodsMap.put(idGoodsInt, new Product(idGoodsInt, nameGoodsStr, goodsOld.getPriceOld(), priceDoub,
-                                        cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, 0));
-                            } else {
-                                goodsMap.put(idGoodsInt, new Product(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
-                                        cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, 0));
-                            }
-
                         }
                     }
                 }
+                break;
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public Map<Integer, Integer> getSectionIdAndCountGoods(DocumentBuilder db, GetData getData, InputSource is) throws IOException, SAXException {
         is.setCharacterStream(new StringReader(getData.getNewData(new URL(Constants.SECTIONS_URL), Constants.CATOLOG_ID_AND_COUNT_PAGE)));

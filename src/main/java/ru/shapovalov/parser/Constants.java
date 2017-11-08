@@ -8,8 +8,8 @@ public class Constants {
             "<guid_agent>" + GUID + "</guid_agent>" +
             "<id_section>";
     public static final String GOODS_2 = "</id_section>" +
-              "<encoding>windows-1251</encoding>\n" +
-//            "<encoding>utf-8</encoding>" +
+//              "<encoding>windows-1251</encoding>\n" +
+            "<encoding>utf-8</encoding>" +
             "<page>";
 
     public static final String GOODS_3 = "</page>" +
@@ -27,7 +27,7 @@ public class Constants {
             "</digiseller.request>";
 
     public static final String SECTIONS_URL = "http://www.plati.com/xml/sections.asp";
-    public static final String GOODS_URL = "http://www.plati.com/xml/goods.asp";
+    public static final String URL = "http://www.plati.com/xml/goods.asp";
     public static final String SECTIONS_URL_RU = "http://www.plati.com/xml/sections.asp";
     public static final String GOODS_URL_RU = "http://www.plati.com/xml/goods.asp";
     public static final String STEAM_GAME_LIST_URL = "http://api.steampowered.com/ISteamApps/GetAppList/v2";

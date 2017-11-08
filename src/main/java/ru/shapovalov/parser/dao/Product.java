@@ -50,7 +50,9 @@ public class Product {
         this.cnt_badresponses = cnt_badresponses;
     }
 
-    public void setType(int type) {this.type = type;}
+    public void setType(int type) {
+        this.type = type;
+    }
 
 
     public int getId_goods() {
@@ -81,8 +83,14 @@ public class Product {
         return cnt_badresponses;
     }
 
-    public int getType() {return type;}
-    public Product() {
-
+    public int getType() {
+        return type;
     }
+
+    @FunctionalInterface
+    interface Intf<T>
+    {
+        public T get1(T arg1);
+    }
+
 }

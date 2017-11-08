@@ -1,32 +1,41 @@
 package ru.shapovalov.parser;
 
-import com.vaadin.data.provider.DataProvider;
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.Sizeable;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.Slider;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.renderers.NumberRenderer;
 import com.vaadin.ui.renderers.TextRenderer;
-import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
+import com.vaadin.ui.themes.ValoTheme;
 import ru.shapovalov.parser.dao.Product;
 import ru.shapovalov.parser.parsing.ParserStrings;
 
-public class PriceTable {
-    public VerticalLayout getTablePrice(){
+import javax.annotation.PostConstruct;
+
+@Theme(ValoTheme.THEME_NAME)
+public class PriceTable extends VerticalLayout {
+
+    private static final long serialVersionUID = 1L;
+    private Grid<Product> grid = new Grid<>();
+
+
+    public PriceTable() {
+    }
+
+    @PostConstruct
+    public void init() {
+        setSizeFull();
+
         ParserStrings parserStrings = new ParserStrings();
         try {
             parserStrings.parserGoods();
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        Container container = new BeanItemContainer<>(Product.class, new Product());
-        Grid<Product> grid = new Grid<Product>((DataProvider<Product, ?>) ParserStrings.oldIdList);
+        grid.setItems(parserStrings.productCollection);
         grid.setCaption("Double click to edit");
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
 
-        TextField nameEditor = new TextField();
         Slider progressEditor = new Slider();
         progressEditor.setWidth(100.0f, Sizeable.Unit.PERCENTAGE);
         progressEditor.setMax(150.0);
@@ -34,17 +43,46 @@ public class PriceTable {
 
         grid.addColumn(Product::getId_goods, new NumberRenderer())
                 .setCaption("ID")
-                .setExpandRatio(0);
+                .setExpandRatio(1);
 
         grid.addColumn(Product::getName_goods, new TextRenderer())
                 .setCaption("Name")
-                .setExpandRatio(1);
+                .setExpandRatio(2);
 
-        grid.addColumn(Product::getPriceOld, new SparklineRenderer())
-                .setCaption("price")
+        grid.addColumn(Product::getPriceOld, new NumberRenderer())
+                .setCaption("Old Price")
+                .setExpandRatio(3);
+
+        grid.addColumn(Product::getPriceNew, new NumberRenderer())
+                .setCaption("New Price")
                 .setExpandRatio(4);
 
-        grid.getEditor().setEnabled(true);
-         return new VerticalLayout();
+        grid.addColumn(Product::getCnt_sell, new NumberRenderer())
+                .setCaption("Cnt sell")
+                .setExpandRatio(5);
+
+        grid.addColumn(Product::getCnt_goodresponses, new NumberRenderer())
+                .setCaption("Cnt Good Responses")
+                .setExpandRatio(6);
+
+        grid.addColumn(Product::getCnt_badresponses, new NumberRenderer())
+                .setCaption("Cnt Bad Responses")
+                .setExpandRatio(7);
+
+        grid.addColumn(Product::getType, new NumberRenderer())
+                .setCaption("Type")
+                .setExpandRatio(8);
+
+        grid.getEditor().setEnabled(false);
+
+        grid.setStyleGenerator(t -> {
+
+                if (t.getPriceOld() ==t.getPriceOld()) {
+                    return "green";
+   }
+                return null;});
+
+
+        addComponent(grid);
     }
 }

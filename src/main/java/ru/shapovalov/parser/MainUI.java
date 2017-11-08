@@ -14,8 +14,8 @@ public class MainUI extends UI {
         layout.setSizeFull();
         layout.setMargin(true);
         PriceTable priceTable = new PriceTable();
-
-        layout.addComponents(new Label("Main UI"), priceTable.getTablePrice());
+priceTable.init();
+        layout.addComponent(priceTable);
 
 
         setContent(layout);
