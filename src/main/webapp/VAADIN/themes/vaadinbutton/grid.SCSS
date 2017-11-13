@@ -1,0 +1,22 @@
+@import "../valo/valo.scss";
+
+@mixin grid {
+  @include valo;
+
+  .v-grid-row.green > td {
+    background-color: rgba(31, 244, 22, 0.75);
+    height: 48px !important;
+    color: white;
+  }
+
+  .v-grid-row.red > td {
+    background-color: rgba(244, 67, 54, 0.75);
+    height: 48px !important;
+    color: white;
+  }
+  .v-grid-row.blue > td {
+    background-color: rgba(52, 83, 244, 0.75);
+    height: 48px !important;
+    color: white;
+  }
+}

@@ -1,11 +1,11 @@
-package ru.shapovalov.parser;
+package ru.shapovalov.parser.UI;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
 
-@Theme(ValoTheme.THEME_NAME)
+@SuppressWarnings("serial")
+@Theme("vaadinbutton")
 public class MainUI extends UI {
 
     @Override
@@ -17,7 +17,11 @@ public class MainUI extends UI {
 priceTable.init();
         layout.addComponent(priceTable);
 
-
-        setContent(layout);
+        TabSheet tabs = new TabSheet();
+        tabs.setSizeFull(); // Make the TabSheet fill all available space. By default the height is fixed.
+//        tabs.addComponent();
+        tabs.addTab( layout, "Price Games" );
+        tabs.addTab( tabs, "Price Changes" );
+        setContent(tabs);
     }
 }

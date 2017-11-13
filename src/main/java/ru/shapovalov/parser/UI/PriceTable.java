@@ -1,4 +1,4 @@
-package ru.shapovalov.parser;
+package ru.shapovalov.parser.UI;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.Sizeable;
@@ -77,10 +77,13 @@ public class PriceTable extends VerticalLayout {
 
         grid.setStyleGenerator(t -> {
 
-                if (t.getPriceOld() ==t.getPriceOld()) {
-                    return "green";
-   }
-                return null;});
+            if (t.getPriceOld() > t.getPriceNew()) {
+                return "green";
+            } else if (t.getPriceOld() < t.getPriceNew()) {
+                return "red";
+            }
+            return null;
+        });
 
 
         addComponent(grid);
