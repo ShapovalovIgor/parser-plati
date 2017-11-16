@@ -1,53 +1,56 @@
 package ru.shapovalov.parser.dao;
 
+import javax.persistence.Entity;
+
+@Entity(name = "product")
 public class Product {
 
-    private int id_goods;
-    private String name_goods;
-    private double priceOld;
-    private double priceNew;
-    private int cnt_sell;
-    private int cnt_goodresponses;
-    private int cnt_badresponses;
+    private int idGoods;
+    private String nameGoods;
+    private double price;
+    private int cntSell;
+    private int cntGoodResponses;
+    private int cntBadResponses;
+    private int idSeller;
     private int type;
 
-    public Product(int id_goods, String name_goods, double priceOld, double priceNew, int cnt_sell, int cnt_goodresponses, int cnt_badresponses, int type) {
-        this.id_goods = id_goods;
-        this.name_goods = name_goods;
-        this.priceOld = priceOld;
-        this.priceNew = priceNew;
-        this.cnt_sell = cnt_sell;
-        this.cnt_goodresponses = cnt_goodresponses;
-        this.cnt_badresponses = cnt_badresponses;
+    public Product(int idGoods, String nameGoods, double price, int cntSell, int cntGoodResponses, int cntBadResponses, int idSeller, int type) {
+        this.idGoods = idGoods;
+        this.nameGoods = nameGoods;
+        this.price = price;
+        this.cntSell = cntSell;
+        this.cntGoodResponses = cntGoodResponses;
+        this.cntBadResponses = cntBadResponses;
+        this.idSeller = idSeller;
         this.type = type;
     }
 
-    public void setId_goods(int id_goods) {
-        this.id_goods = id_goods;
+    public void setIdGoods(int id_goods) {
+        this.idGoods = id_goods;
     }
 
-    public void setName_goods(String name_goods) {
-        this.name_goods = name_goods;
+    public void setNameGoods(String nameGoods) {
+        this.nameGoods = nameGoods;
     }
 
-    public void setPriceOld(double priceOld) {
-        this.priceOld = priceOld;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-    public void setPriceNew(double priceNew) {
-        this.priceNew = priceNew;
+    public void setCntSell(int cnt_sell) {
+        this.cntSell = cnt_sell;
     }
 
-    public void setCnt_sell(int cnt_sell) {
-        this.cnt_sell = cnt_sell;
+    public void setCntGoodResponses(int cnt_goodresponses) {
+        this.cntGoodResponses = cnt_goodresponses;
     }
 
-    public void setCnt_goodresponses(int cnt_goodresponses) {
-        this.cnt_goodresponses = cnt_goodresponses;
+    public void setCntBadResponses(int cnt_badresponses) {
+        this.cntBadResponses = cnt_badresponses;
     }
 
-    public void setCnt_badresponses(int cnt_badresponses) {
-        this.cnt_badresponses = cnt_badresponses;
+    public void setIdSeller(int cnt_badresponses) {
+        this.idSeller = idSeller;
     }
 
     public void setType(int type) {
@@ -55,32 +58,32 @@ public class Product {
     }
 
 
-    public int getId_goods() {
-        return id_goods;
+    public int getIdGoods() {
+        return idGoods;
     }
 
-    public String getName_goods() {
-        return name_goods;
+    public String getNameGoods() {
+        return nameGoods;
     }
 
-    public double getPriceOld() {
-        return priceOld;
+    public double getPrice() {
+        return price;
     }
 
-    public double getPriceNew() {
-        return priceNew;
+    public int getCntSell() {
+        return cntSell;
     }
 
-    public int getCnt_sell() {
-        return cnt_sell;
+    public int getCntGoodResponses() {
+        return cntGoodResponses;
     }
 
-    public int getCnt_goodresponses() {
-        return cnt_goodresponses;
+    public int getCntBadResponses() {
+        return cntBadResponses;
     }
 
-    public int getCnt_badresponses() {
-        return cnt_badresponses;
+    public int getIdSeller() {
+        return idSeller;
     }
 
     public int getType() {

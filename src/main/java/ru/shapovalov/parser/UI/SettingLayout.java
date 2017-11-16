@@ -1,11 +1,12 @@
 package ru.shapovalov.parser.UI;
 
-import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 
-public class FieldNickName {
+import javax.annotation.PostConstruct;
 
+public class SettingLayout extends VerticalLayout {
     private TextField facultyField;
     private Button setNickName;
 
@@ -13,7 +14,9 @@ public class FieldNickName {
         return facultyField;
     }
 
-    private void addFacultyField() {
+    @PostConstruct
+    public void init() {
         facultyField = new TextField();
+
     }
 }

@@ -5,11 +5,11 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
     <persistence-unit name="item-manager-pu" transaction-type="RESOURCE_LOCAL">
-        <class>com.haulmont.testtask.DAO.Student</class>
-        <class>com.haulmont.testtask.DAO.Group</class>
+        <class>ru.shapovalov.parser.dao.Product</class>
+        <class>ru.shapovalov.parser.dao.User</class>
         <properties>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:hsqldb:mem:testDB;shutdown=true"/>
+                      value="jdbc:hsqldb::file:c:\databases\testDB;shutdown=true"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.jdbc.driver"
@@ -23,10 +23,11 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
 
             <property name="hibernate.hbm2ddl.auto"
                       value="create" />
+            <property name="hsqldb.lock_file"
+                      value="false" />
             <property name="hibernate.format_sql" value = "true"/>
             <property name="current_session_context_class" value = "thread"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
-
 
         </properties>
 

@@ -1,4 +1,4 @@
-package ru.shapovalov.parser.UI;
+package ru.shapovalov.parser.UI.Table;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.Sizeable;
@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 public class PriceTable extends VerticalLayout {
 
     private static final long serialVersionUID = 1L;
-    private Grid<Product> grid = new Grid<>();
+    private Grid<Product> grid = new Grid<>(Product.class);
 
 
     public PriceTable() {
@@ -41,50 +41,44 @@ public class PriceTable extends VerticalLayout {
         progressEditor.setMax(150.0);
         progressEditor.setMin(1.0);
 
-        grid.addColumn(Product::getId_goods, new NumberRenderer())
+        grid.addColumn(Product::getIdGoods, new NumberRenderer())
                 .setCaption("ID")
                 .setExpandRatio(1);
 
-        grid.addColumn(Product::getName_goods, new TextRenderer())
+        grid.addColumn(Product::getNameGoods, new TextRenderer())
                 .setCaption("Name")
                 .setExpandRatio(2);
 
-        grid.addColumn(Product::getPriceOld, new NumberRenderer())
+        grid.addColumn(Product::getPrice, new NumberRenderer())
                 .setCaption("Old Price")
                 .setExpandRatio(3);
 
-        grid.addColumn(Product::getPriceNew, new NumberRenderer())
-                .setCaption("New Price")
+        grid.addColumn(Product::getCntSell, new NumberRenderer())
+                .setCaption("Cnt sell")
                 .setExpandRatio(4);
 
-        grid.addColumn(Product::getCnt_sell, new NumberRenderer())
-                .setCaption("Cnt sell")
+        grid.addColumn(Product::getCntGoodResponses, new NumberRenderer())
+                .setCaption("Cnt Good Responses")
                 .setExpandRatio(5);
 
-        grid.addColumn(Product::getCnt_goodresponses, new NumberRenderer())
-                .setCaption("Cnt Good Responses")
-                .setExpandRatio(6);
-
-        grid.addColumn(Product::getCnt_badresponses, new NumberRenderer())
+        grid.addColumn(Product::getCntBadResponses, new NumberRenderer())
                 .setCaption("Cnt Bad Responses")
-                .setExpandRatio(7);
+                .setExpandRatio(6);
 
         grid.addColumn(Product::getType, new NumberRenderer())
                 .setCaption("Type")
-                .setExpandRatio(8);
+                .setExpandRatio(7);
 
         grid.getEditor().setEnabled(false);
 
-        grid.setStyleGenerator(t -> {
-
-            if (t.getPriceOld() > t.getPriceNew()) {
-                return "green";
-            } else if (t.getPriceOld() < t.getPriceNew()) {
-                return "red";
-            }
-            return null;
-        });
-
+//        grid.setStyleGenerator(t -> {
+//            if (t.getPriceOld() == t.getPriceNew()) {
+//                return "green";
+//            } else if (t.getPriceOld() < t.getPriceNew()) {
+//                return "red";
+//            }
+//            return null;
+//        });
 
         addComponent(grid);
     }

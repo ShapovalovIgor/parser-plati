@@ -31,4 +31,5 @@ public class Constants {
     public static final String SECTIONS_URL_RU = "http://www.plati.com/xml/sections.asp";
     public static final String GOODS_URL_RU = "http://www.plati.com/xml/goods.asp";
     public static final String STEAM_GAME_LIST_URL = "http://api.steampowered.com/ISteamApps/GetAppList/v2";
+    public static final String CREATE_TABLE_SCRIPT = "CREATE_TABLE.sql";
 }

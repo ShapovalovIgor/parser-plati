@@ -5,7 +5,9 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import ru.shapovalov.parser.Constants;
+import ru.shapovalov.parser.UI.MainUI;
 import ru.shapovalov.parser.dao.Product;
+import ru.shapovalov.parser.database.HibernateUtil;
 import ru.shapovalov.parser.getdate.GetData;
 
 
@@ -69,21 +71,25 @@ public class ParserStrings {
                         double priceDoub = Double.valueOf(getCharacterDataFromElement(line)
                                 .replace(',', '.'));
 
-                        NodeList cnt_sell = element.getElementsByTagName("cnt_sell");
-                        line = (Element) cnt_sell.item(0);
+                        NodeList cntSell = element.getElementsByTagName("cnt_sell");
+                        line = (Element) cntSell.item(0);
                         int cntSellInt = Integer.parseInt(getCharacterDataFromElement(line));
 
-                        NodeList cnt_goodresponses = element.getElementsByTagName("cnt_goodresponses");
-                        line = (Element) cnt_goodresponses.item(0);
+                        NodeList cntGoodResponses = element.getElementsByTagName("cnt_goodresponses");
+                        line = (Element) cntGoodResponses.item(0);
                         int cntGoodresponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
 
-                        NodeList cnt_badresponses = element.getElementsByTagName("cnt_badresponses");
-                        line = (Element) cnt_badresponses.item(0);
+                        NodeList cntBadResponses = element.getElementsByTagName("cnt_badresponses");
+                        line = (Element) cntBadResponses.item(0);
                         int cntBadresponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
 
+                        NodeList idSeller = element.getElementsByTagName("id_seller");
+                        line = (Element) idSeller.item(0);
+                        int idSellerInt = Integer.parseInt(getCharacterDataFromElement(line));
+
                         if (startCollection) {
-                            productCollection.add(new Product(idGoodsInt, nameGoodsStr, priceDoub, priceDoub,
-                                    cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, 0));
+                            productCollection.add(new Product(idGoodsInt, nameGoodsStr, priceDoub,
+                                    cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, idSellerInt, 0));
                         }
                     }
                 }
@@ -93,6 +99,7 @@ public class ParserStrings {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        MainUI.hibernateUtil.addProducts(productCollection);
     }
 
 
