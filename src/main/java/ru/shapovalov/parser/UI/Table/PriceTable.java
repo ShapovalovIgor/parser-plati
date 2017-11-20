@@ -3,6 +3,8 @@ package ru.shapovalov.parser.UI.Table;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
+import com.vaadin.ui.components.grid.HeaderCell;
+import com.vaadin.ui.components.grid.HeaderRow;
 import com.vaadin.ui.renderers.NumberRenderer;
 import com.vaadin.ui.renderers.TextRenderer;
 import com.vaadin.ui.themes.ValoTheme;
@@ -35,7 +37,6 @@ public class PriceTable extends VerticalLayout {
         grid.setCaption("Double click to edit");
         grid.setSizeFull();
         grid.setSelectionMode(Grid.SelectionMode.NONE);
-
         Slider progressEditor = new Slider();
         progressEditor.setWidth(100.0f, Sizeable.Unit.PERCENTAGE);
         progressEditor.setMax(150.0);
@@ -80,6 +81,10 @@ public class PriceTable extends VerticalLayout {
 //            return null;
 //        });
 
+
+// Create a header row to hold column filters
+        HeaderRow filterRow = grid.appendHeaderRow();
+  
         addComponent(grid);
     }
 }

@@ -15,7 +15,7 @@ public static HibernateUtil hibernateUtil;
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         layout.setMargin(true);
-        
+
         hibernateUtil = new HibernateUtil();
 
         PriceTable priceTable = new PriceTable();

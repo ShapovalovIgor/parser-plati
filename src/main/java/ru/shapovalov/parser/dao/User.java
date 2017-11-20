@@ -1,26 +1,37 @@
 package ru.shapovalov.parser.dao;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity(name = "user")
 public class User {
-
+    @Id
+    @Column(name = "id")
     private int idSeller;
-    private Collection<Product> name_goods;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idSeller")
+    private Set<Product> name_goods = new HashSet<>();
+
+    public User(int idSeller) {
+        this.idSeller = idSeller;
+        this.name_goods = null;
+
+    }
 
 
-    public User(int idSeller, Collection<Product> name_goods) {
+    public User(int idSeller, Set<Product> name_goods) {
         this.idSeller = idSeller;
         this.name_goods = name_goods;
 
     }
 
+
     public void setIdSeller(int idSeller) {
         this.idSeller = idSeller;
     }
 
-    public void setName_goods(Collection<Product> name_goods) {
+    public void setGoods(Set<Product> name_goods) {
         this.name_goods = name_goods;
     }
 
@@ -28,7 +39,7 @@ public class User {
         return idSeller;
     }
 
-    public Collection<Product> getName_goods() {
+    public Collection<Product> getGoods() {
         return name_goods;
     }
 

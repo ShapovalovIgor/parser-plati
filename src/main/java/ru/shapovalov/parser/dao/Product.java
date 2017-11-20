@@ -1,17 +1,27 @@
 package ru.shapovalov.parser.dao;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity(name = "product")
 public class Product {
-
+    @Id
+    @Column(name = "id")
     private int idGoods;
+    @Column(name = "name_goods")
     private String nameGoods;
+    @Column(name = "price")
     private double price;
+    @Column(name = "cnt_sell")
     private int cntSell;
+    @Column(name = "cnt_good_responses")
     private int cntGoodResponses;
+    @Column(name = "cnt_bad_responses")
     private int cntBadResponses;
+    @Column(name = "id_seller")
     private int idSeller;
+    @Column(name = "type_product")
     private int type;
 
     public Product(int idGoods, String nameGoods, double price, int cntSell, int cntGoodResponses, int cntBadResponses, int idSeller, int type) {
@@ -91,8 +101,7 @@ public class Product {
     }
 
     @FunctionalInterface
-    interface Intf<T>
-    {
+    interface Intf<T> {
         public T get1(T arg1);
     }
 

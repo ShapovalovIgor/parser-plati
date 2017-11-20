@@ -9,7 +9,7 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
         <class>ru.shapovalov.parser.dao.User</class>
         <properties>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:hsqldb::file:c:\databases\testDB;shutdown=true"/>
+                      value="jdbc:hsqldb:file:\databases\DB;hsqldb.lock_file=false;hsqldb.sqllog=3;shutdown=true;syntax_ora=true"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
             <property name="javax.persistence.jdbc.password" value=""/>
             <property name="javax.persistence.jdbc.driver"
@@ -22,7 +22,7 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
                       value="true" />
 
             <property name="hibernate.hbm2ddl.auto"
-                      value="create" />
+                      value="update" />
             <property name="hsqldb.lock_file"
                       value="false" />
             <property name="hibernate.format_sql" value = "true"/>

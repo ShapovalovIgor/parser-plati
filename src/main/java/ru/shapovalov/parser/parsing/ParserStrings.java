@@ -25,6 +25,7 @@ public class ParserStrings {
 
     public static boolean startCollection = true;
     public Collection<Product> productCollection = new ArrayList<>();
+    public HashSet<Integer> userCollection = new HashSet<>();
 
     public void parserGoods() throws Exception {
         GetData getData = new GetData();
@@ -90,6 +91,7 @@ public class ParserStrings {
                         if (startCollection) {
                             productCollection.add(new Product(idGoodsInt, nameGoodsStr, priceDoub,
                                     cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, idSellerInt, 0));
+                            userCollection.add(idSellerInt);
                         }
                     }
                 }
@@ -99,7 +101,7 @@ public class ParserStrings {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        MainUI.hibernateUtil.addProducts(productCollection);
+        MainUI.hibernateUtil.addProducts(productCollection, userCollection);
     }
 
 
