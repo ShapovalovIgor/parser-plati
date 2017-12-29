@@ -1,5 +1,7 @@
 Vaadin test task
 =========
+Branch mame: parser_platy 
+My test project
 
 Prerequisites
 -------------
@@ -11,7 +13,7 @@ Build and Run
 -------------
 0. jetty conf:
 
-<img src="../master/path/conf_jetty.jpg" width="350" height="250">
+<img src="../master/conf_jetty.jpg" width="350" height="250">
 
 1. Run in the command line:
 	```
