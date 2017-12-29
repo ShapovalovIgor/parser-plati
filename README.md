@@ -1,4 +1,4 @@
-Test Task
+Vaadin test task
 =========
 
 Prerequisites
@@ -9,6 +9,9 @@ Prerequisites
 
 Build and Run
 -------------
+0. jetty conf:
+
+<img src="../master/path/conf_jetty.jpg" width="350" height="250">
 
 1. Run in the command line:
 	```

@@ -2,12 +2,16 @@ package ru.shapovalov.parser.dao;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity(name = "product")
 public class Product {
     @Id
+    @GeneratedValue
     @Column(name = "id")
+    private int id;
+    @Column(name = "id_good")
     private int idGoods;
     @Column(name = "name_goods")
     private String nameGoods;

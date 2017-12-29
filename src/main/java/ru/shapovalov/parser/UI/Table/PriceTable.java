@@ -84,7 +84,7 @@ public class PriceTable extends VerticalLayout {
 
 // Create a header row to hold column filters
         HeaderRow filterRow = grid.appendHeaderRow();
-  
+
         addComponent(grid);
     }
 }
