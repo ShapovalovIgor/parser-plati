@@ -10,12 +10,15 @@ import com.vaadin.ui.renderers.HtmlRenderer;
 import com.vaadin.ui.renderers.NumberRenderer;
 import com.vaadin.ui.renderers.TextRenderer;
 import com.vaadin.ui.themes.ValoTheme;
+import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
+import org.vaadin.sparklines.Sparklines;
 import ru.shapovalov.parser.dao.Product;
 import ru.shapovalov.parser.parsing.ParserStrings;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-
+import javax.persistence.criteria.CriteriaBuilder;
+import java.lang.reflect.Array;
+import java.util.*;
 @Theme(ValoTheme.THEME_NAME)
 public class PriceTable extends Grid<Product> {
 
@@ -24,6 +27,11 @@ public class PriceTable extends Grid<Product> {
 
 
     public PriceTable(Collection productCollection) {
+
+        SparklineRenderer<Product> sparkline = new SparklineRenderer<>(200,30);
+
+        final SparklineRenderer.SparklineConfiguration config = sparkline.getConfiguration();
+        new Sparkline(config);
         setSizeFull();
         setItems(productCollection);
         setCaption("Price:");
@@ -42,6 +50,7 @@ public class PriceTable extends Grid<Product> {
         addColumn(Product::getPrice, new NumberRenderer())
                 .setCaption("Old Price");
 
+        addColumn(Product::getPrices, sparkline).setCaption("Price History");
         addColumn(product -> {
             Double priceNew = product.getPrice();
             Double priceOld = product.getPrice();

@@ -7,7 +7,6 @@ import org.xml.sax.SAXException;
 import ru.shapovalov.parser.Constants;
 import ru.shapovalov.parser.UI.MainUI;
 import ru.shapovalov.parser.dao.Product;
-import ru.shapovalov.parser.database.HibernateUtil;
 import ru.shapovalov.parser.getdate.GetData;
 
 
@@ -26,7 +25,6 @@ public class ParserStrings {
     public static boolean startCollection = true;
     public Collection<Product> productCollection = new ArrayList<>();
     public HashSet<Integer> userCollection = new HashSet<>();
-
     public void parserGoods() throws Exception {
         GetData getData = new GetData();
 
@@ -45,11 +43,8 @@ public class ParserStrings {
                     is.setCharacterStream(new StringReader(getData.getNewData(
                             new URL(Constants.URL),
                             Constants.GOODS_1 + sectionId + Constants.GOODS_2 + page + Constants.GOODS_3)));
-
                     Document doc = db.parse(is);
-
                     NodeList nodes = doc.getElementsByTagName("row");
-
                     for (int i = 0; i < nodes.getLength(); i++) {
                         Element element = (Element) nodes.item(i);
 
@@ -90,7 +85,7 @@ public class ParserStrings {
 
                         if (startCollection) {
                             productCollection.add(new Product(idGoodsInt, nameGoodsStr, priceDoub,
-                                    cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, idSellerInt, 0));
+                                    cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, idSellerInt, 0, getPrices(idGoodsInt)));
                             userCollection.add(idSellerInt);
                         }
                     }
@@ -134,5 +129,16 @@ public class ParserStrings {
             return cd.getData();
         }
         return "?";
+    }
+
+    public Number[] getPrices(int id) {
+        Number[] numbers;
+         Random rand ;
+        numbers = new Number[60];
+        rand = new Random(id);
+        for (int i=0;i<60;i++) {
+            numbers[i] = rand.nextInt()/10000.0;
+        }
+        return numbers;
     }
 }

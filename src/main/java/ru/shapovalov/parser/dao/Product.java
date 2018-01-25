@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Random;
 
 @Entity(name = "product")
 public class Product {
@@ -27,8 +28,10 @@ public class Product {
     private int idSeller;
     @Column(name = "type_product")
     private int type;
+    private  Number[] numbers;
+    private  Random rand;
 
-    public Product(int idGoods, String nameGoods, double price, int cntSell, int cntGoodResponses, int cntBadResponses, int idSeller, int type) {
+    public Product(int idGoods, String nameGoods, double price, int cntSell, int cntGoodResponses, int cntBadResponses, int idSeller, int type, Number[] numbers) {
         this.idGoods = idGoods;
         this.nameGoods = nameGoods;
         this.price = price;
@@ -37,6 +40,10 @@ public class Product {
         this.cntBadResponses = cntBadResponses;
         this.idSeller = idSeller;
         this.type = type;
+        this.numbers = numbers;
+        numbers = new Number[60];
+
+        rand = new Random(id);
     }
 
     public void setIdGoods(int id_goods) {
@@ -82,6 +89,15 @@ public class Product {
 
     public double getPrice() {
         return price;
+    }
+
+
+    public Number[] getPrices() {
+
+        for (int i=0;i<60;i++) {
+            numbers[i] = rand.nextInt()/10000.0;
+        }
+        return numbers;
     }
 
     public int getCntSell() {
