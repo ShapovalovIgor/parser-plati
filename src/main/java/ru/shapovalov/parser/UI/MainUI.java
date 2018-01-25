@@ -5,6 +5,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import ru.shapovalov.parser.UI.Table.PriceTable;
 import ru.shapovalov.parser.database.HibernateUtil;
+import ru.shapovalov.parser.parsing.ParserStrings;
 
 @SuppressWarnings("serial")
 @Theme("vaadinbutton")
@@ -18,8 +19,14 @@ public static HibernateUtil hibernateUtil;
 
         hibernateUtil = new HibernateUtil();
 
-        PriceTable priceTable = new PriceTable();
-priceTable.init();
+        ParserStrings parserStrings = new ParserStrings();
+        try {
+            parserStrings.parserGoods();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        PriceTable priceTable = new PriceTable(parserStrings.productCollection);
+
         layout.addComponent(priceTable);
 
         TabSheet tabs = new TabSheet();

@@ -109,4 +109,6 @@ public class Product {
         public T get1(T arg1);
     }
 
+    public Product() {
+    }
 }

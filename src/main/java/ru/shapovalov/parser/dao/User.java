@@ -19,6 +19,9 @@ public class User {
 
     }
 
+    public User() {
+
+    }
 
     public User(int idSeller, Set<Product> name_goods) {
         this.idSeller = idSeller;

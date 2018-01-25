@@ -113,25 +113,35 @@ public class HibernateUtil {
     }
 
     public void addProducts(Collection<Product> productList, Set<Integer> userIdList) {
-        addUsers(userIdList);
-        EntityManager em = getEm();
-        em.getTransaction().begin();
-        for (Product product : productList)
-            em.persist(product);
-        em.getTransaction().commit();
-        em.close();
+        Collection oldProduct = getProduct();
+        productList.removeAll(oldProduct);
+        if (productList.isEmpty()) {
+            addUsers(userIdList);
+            EntityManager em = getEm();
+            em.getTransaction().begin();
+            for (Product product : productList)
+                em.persist(product);
+            em.getTransaction().commit();
+            em.close();
+        }
     }
 
     public void addUsers(Set<Integer> userIdList) {
-        EntityManager em = getEm();
-        em.getTransaction().begin();
-        for (Integer userId : userIdList) {
-            User user = new User(userId);
+        Collection oldUser = getUser();
+        userIdList.removeAll(oldUser);
+        if (userIdList.isEmpty()) {
+            EntityManager em = getEm();
+            em.getTransaction().begin();
 
-            em.persist(user);
+            for (Integer userId : userIdList) {
+                User user = new User(userId);
+
+                em.persist(user);
+            }
+            if (userIdList.isEmpty())
+                em.getTransaction().commit();
+            em.close();
         }
-        em.getTransaction().commit();
-        em.close();
     }
 
     public boolean createDB() {
