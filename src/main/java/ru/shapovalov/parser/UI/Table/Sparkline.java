@@ -12,7 +12,6 @@ public class Sparkline {
 
         config.setPathWidth(2);
         config.setMinMaxColor("#f96");
-
         config.setNormalRangeVisible(!config.isNormalRangeVisible());
         config.setAverageVisible(!config.isAverageVisible());
         config.setMinMaxVisible(!config.isMinMaxVisible());

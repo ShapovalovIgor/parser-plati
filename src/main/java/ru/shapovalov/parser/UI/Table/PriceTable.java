@@ -22,10 +22,6 @@ import java.util.*;
 @Theme(ValoTheme.THEME_NAME)
 public class PriceTable extends Grid<Product> {
 
-    private static final long serialVersionUID = 1L;
-    private Grid<Product> grid = new Grid<>(Product.class);
-
-
     public PriceTable(Collection productCollection) {
 
         SparklineRenderer<Product> sparkline = new SparklineRenderer<>(200,30);
