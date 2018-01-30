@@ -28,8 +28,7 @@ public class ParserStrings {
     public static boolean startCollection = true;
     public Collection<Product> productCollection = new ArrayList<>();
     public HashSet<Integer> userCollection = new HashSet<>();
-    public HashSet<Price> priceMap = new HashSet<>();
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");
 
     public void parserGoods() throws Exception {
         GetData getData = new GetData();
@@ -79,11 +78,11 @@ public class ParserStrings {
 
                         NodeList cntGoodResponses = element.getElementsByTagName("cnt_goodresponses");
                         line = (Element) cntGoodResponses.item(0);
-                        int cntGoodresponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
+                        int cntGoodResponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
 
                         NodeList cntBadResponses = element.getElementsByTagName("cnt_badresponses");
                         line = (Element) cntBadResponses.item(0);
-                        int cntBadresponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
+                        int cntBadResponsesInt = Integer.parseInt(getCharacterDataFromElement(line));
 
                         NodeList idSeller = element.getElementsByTagName("id_seller");
                         line = (Element) idSeller.item(0);
@@ -92,12 +91,12 @@ public class ParserStrings {
 
                         if (startCollection) {
                             productCollection.add(new Product(idGoodsInt, nameGoodsStr, prices,
-                                    cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, idSellerInt, 0));
+                                    cntSellInt, cntGoodResponsesInt, cntBadResponsesInt, idSellerInt, 0));
                             userCollection.add(idSellerInt);
                         }
                     }
                 }
-                break;
+//                break; (test break scan 1 page)
 
             }
         } catch (Exception e) {
