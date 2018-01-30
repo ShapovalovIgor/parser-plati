@@ -43,28 +43,19 @@ public class PriceTable extends Grid<Product> {
         addColumn(Product::getNameGoods, new TextRenderer())
                 .setCaption("Name");
 
-        addColumn(Product::getPrice, new NumberRenderer())
-                .setCaption("Old Price");
-
         addColumn(Product::getPrices, sparkline).setCaption("Price History");
-        addColumn(product -> {
-            Double priceNew = product.getPrice();
-            Double priceOld = product.getPrice();
-            return getColorColumnPrice(priceOld, priceNew);
-        }, new HtmlRenderer())
-                .setCaption("New Price");
 
         addColumn(Product::getCntSell, new NumberRenderer())
                 .setCaption("Cnt sell");
 
-        addColumn(Product::getCntGoodResponses, new NumberRenderer())
-                .setCaption("Cnt Good Responses");
-
-        addColumn(Product::getCntBadResponses, new NumberRenderer())
-                .setCaption("Cnt Bad Responses");
-
-        addColumn(Product::getType, new NumberRenderer())
-                .setCaption("Type");
+//        addColumn(Product::getCntGoodResponses, new NumberRenderer())
+//                .setCaption("Cnt Good Responses");
+//
+//        addColumn(Product::getCntBadResponses, new NumberRenderer())
+//                .setCaption("Cnt Bad Responses");
+//
+//        addColumn(Product::getType, new NumberRenderer())
+//                .setCaption("Type");
     }
 
     private String getColorColumnPrice(Double priceOld, Double priceNew) {

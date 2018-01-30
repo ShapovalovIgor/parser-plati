@@ -10,12 +10,14 @@ import java.util.Set;
 import com.vaadin.server.VaadinService;
 
 import ru.shapovalov.parser.Constants;
+import ru.shapovalov.parser.dao.Price;
 import ru.shapovalov.parser.dao.Product;
 import ru.shapovalov.parser.dao.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
 
@@ -93,6 +95,33 @@ public class HibernateUtil {
         return userList;
     }
 
+
+    public Collection<Price> getPriceHistory(int id) {
+        EntityManager em = getEm();
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery(Price.class);
+        cq.from(Price.class);
+        List priceList = em.createQuery(cq).getResultList();
+        Query query = null;
+        if (!priceList.isEmpty()) {
+            for (Object price : priceList) {
+                if (id == ((Price) price).getPriceId()) {
+                    query = em.createQuery("SELECT  p FROM Price p WHERE p.id =" + id);
+                    em.close();
+                    return (Collection<Price>) query.getResultList();
+                }
+            }
+        }
+        return null;
+    }
+
+    public void addPrices(Collection<Price> priceCollection) {
+        EntityManager em = getEm();
+        em.getTransaction().begin();
+        for (Price price : priceCollection)
+            em.persist(price);
+        em.getTransaction().commit();
+        em.close();
+    }
 
     public boolean updateUser(User user) {
         EntityManager em = getEm();

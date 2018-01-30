@@ -1,12 +1,13 @@
 package ru.shapovalov.parser.parsing;
 
-import org.w3c.dom.CharacterData;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import ru.shapovalov.parser.Constants;
 import ru.shapovalov.parser.UI.MainUI;
+import ru.shapovalov.parser.dao.Price;
 import ru.shapovalov.parser.dao.Product;
+import ru.shapovalov.parser.database.HibernateUtil;
 import ru.shapovalov.parser.getdate.GetData;
 
 
@@ -15,6 +16,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -25,6 +28,9 @@ public class ParserStrings {
     public static boolean startCollection = true;
     public Collection<Product> productCollection = new ArrayList<>();
     public HashSet<Integer> userCollection = new HashSet<>();
+    public HashSet<Price> priceMap = new HashSet<>();
+    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("mm-dd-yyyy");
+
     public void parserGoods() throws Exception {
         GetData getData = new GetData();
 
@@ -82,10 +88,11 @@ public class ParserStrings {
                         NodeList idSeller = element.getElementsByTagName("id_seller");
                         line = (Element) idSeller.item(0);
                         int idSellerInt = Integer.parseInt(getCharacterDataFromElement(line));
+                        Double[] prices = updatePrice(idGoodsInt, priceDoub);
 
                         if (startCollection) {
-                            productCollection.add(new Product(idGoodsInt, nameGoodsStr, priceDoub,
-                                    cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, idSellerInt, 0, getPrices(idGoodsInt)));
+                            productCollection.add(new Product(idGoodsInt, nameGoodsStr, prices,
+                                    cntSellInt, cntGoodresponsesInt, cntBadresponsesInt, idSellerInt, 0));
                             userCollection.add(idSellerInt);
                         }
                     }
@@ -133,12 +140,81 @@ public class ParserStrings {
 
     public Number[] getPrices(int id) {
         Number[] numbers;
-         Random rand ;
+        Random rand;
         numbers = new Number[60];
         rand = new Random(id);
-        for (int i=0;i<60;i++) {
-            numbers[i] = rand.nextInt()/10000.0;
+        for (int i = 0; i < 60; i++) {
+            numbers[i] = rand.nextInt() / 10000.0;
         }
         return numbers;
+    }
+
+    private static List<Price> addElement(List list, Price price) {
+        if (list != null) {
+            int length = list.size();
+            List temp = new ArrayList(length);
+            for (int elemNum = 0; elemNum < length; elemNum++) {
+                temp.add(elemNum, list.get(elemNum + 1));
+            }
+            temp.add(length, price);
+            return temp;
+        } else {
+            return null;
+        }
+    }
+
+    private static Double[] getValues(List list) {
+        if (list != null) {
+            int length = list.size();
+            Double[] temp = new Double[length];
+            for (int elemNum = 0; elemNum < length; elemNum++) {
+                Price price = (Price) list.get(elemNum);
+                temp[elemNum] = price.getPrice();
+            }
+            return temp;
+        } else {
+            return null;
+        }
+    }
+
+    private Double[] updatePrice(int id, Double price) throws ParseException {
+        List<Price> prices = (List<Price>) MainUI.hibernateUtil.getPriceHistory(id);
+        if (prices == null
+                || prices.isEmpty()) {
+            Price priceObj = new Price(id, price, getDate());
+            prices = new ArrayList<>();
+            prices.add(priceObj);
+        } else {
+            Date date = getDate();
+            Price priceTmp = null;
+            for (Price priceObj : prices) {
+                if (priceObj.getDate().equals(date)) {
+                    priceObj.setPrice(price);
+                    priceTmp = priceObj;
+                }
+            }
+            if (priceTmp != null) {
+                prices.add(priceTmp);
+                return getValues(prices);
+            }
+            if (prices.size() == 30) {
+                Price priceObj = new Price(id, price, getDate());
+                prices = addElement(prices, priceObj);
+
+            } else {
+                Price priceObj = new Price(id, price, getDate());
+                prices.add(priceObj);
+            }
+
+        }
+        MainUI.hibernateUtil.addPrices(prices);
+        return getValues(prices);
+    }
+
+    private Date getDate() throws ParseException {
+        Date date = new Date();
+        String format = dateFormat.format(date);
+        Date dt = dateFormat.parse(format);
+        return dt;
     }
 }

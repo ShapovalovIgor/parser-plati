@@ -1,10 +1,9 @@
 package ru.shapovalov.parser.dao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 @Entity(name = "product")
 public class Product {
@@ -16,8 +15,8 @@ public class Product {
     private int idGoods;
     @Column(name = "name_goods")
     private String nameGoods;
-    @Column(name = "price")
-    private double price;
+    @Column(name = "price_id")
+    private Double[] prices;
     @Column(name = "cnt_sell")
     private int cntSell;
     @Column(name = "cnt_good_responses")
@@ -28,22 +27,16 @@ public class Product {
     private int idSeller;
     @Column(name = "type_product")
     private int type;
-    private  Number[] numbers;
-    private  Random rand;
 
-    public Product(int idGoods, String nameGoods, double price, int cntSell, int cntGoodResponses, int cntBadResponses, int idSeller, int type, Number[] numbers) {
+    public Product(int idGoods, String nameGoods, Double[] prices, int cntSell, int cntGoodResponses, int cntBadResponses, int idSeller, int type) {
         this.idGoods = idGoods;
         this.nameGoods = nameGoods;
-        this.price = price;
+        this.prices = prices;
         this.cntSell = cntSell;
         this.cntGoodResponses = cntGoodResponses;
         this.cntBadResponses = cntBadResponses;
         this.idSeller = idSeller;
         this.type = type;
-        this.numbers = numbers;
-        numbers = new Number[60];
-
-        rand = new Random(id);
     }
 
     public void setIdGoods(int id_goods) {
@@ -54,8 +47,8 @@ public class Product {
         this.nameGoods = nameGoods;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setPrices(Double[] prices) {
+        this.prices = prices;
     }
 
     public void setCntSell(int cnt_sell) {
@@ -87,17 +80,10 @@ public class Product {
         return nameGoods;
     }
 
-    public double getPrice() {
-        return price;
-    }
 
 
-    public Number[] getPrices() {
-
-        for (int i=0;i<60;i++) {
-            numbers[i] = rand.nextInt()/10000.0;
-        }
-        return numbers;
+    public Double[] getPrices() {
+        return prices;
     }
 
     public int getCntSell() {
@@ -123,8 +109,5 @@ public class Product {
     @FunctionalInterface
     interface Intf<T> {
         public T get1(T arg1);
-    }
-
-    public Product() {
     }
 }
