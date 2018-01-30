@@ -48,11 +48,11 @@ public class PriceTable extends Grid<Product> {
         addColumn(Product::getCntSell, new NumberRenderer())
                 .setCaption("Cnt sell");
 
-//        addColumn(Product::getCntGoodResponses, new NumberRenderer())
-//                .setCaption("Cnt Good Responses");
-//
-//        addColumn(Product::getCntBadResponses, new NumberRenderer())
-//                .setCaption("Cnt Bad Responses");
+        addColumn(Product::getCntGoodResponses, new NumberRenderer())
+                .setCaption("Cnt Good Responses");
+
+        addColumn(Product::getCntBadResponses, new NumberRenderer())
+                .setCaption("Cnt Bad Responses");
 //
 //        addColumn(Product::getType, new NumberRenderer())
 //                .setCaption("Type");

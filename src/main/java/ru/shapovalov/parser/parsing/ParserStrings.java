@@ -184,6 +184,8 @@ public class ParserStrings {
             Price priceObj = new Price(id, price, getDate());
             prices = new ArrayList<>();
             prices.add(priceObj);
+            System.out.println("***add price***size:" + prices.size() + " id:" + id);
+            MainUI.hibernateUtil.addPrice(priceObj);
         } else {
             Date date = getDate();
             Price priceTmp = null;
@@ -191,6 +193,8 @@ public class ParserStrings {
                 if (priceObj.getDate().equals(date)) {
                     priceObj.setPrice(price);
                     priceTmp = priceObj;
+                    MainUI.hibernateUtil.updatePrice(priceObj);
+                    System.out.println("***update price***");
                 }
             }
             if (priceTmp != null) {
@@ -200,14 +204,20 @@ public class ParserStrings {
             if (prices.size() == 30) {
                 Price priceObj = new Price(id, price, getDate());
                 prices = addElement(prices, priceObj);
+                MainUI.hibernateUtil.removePrices(id, prices.get(0).getDate());
+                System.out.println("***remove price30***");
+
+                MainUI.hibernateUtil.addPrice(priceObj);
 
             } else {
                 Price priceObj = new Price(id, price, getDate());
                 prices.add(priceObj);
+                MainUI.hibernateUtil.removePrices(id, prices.get(0).getDate());
+                System.out.println("***remove price***");
+                MainUI.hibernateUtil.addPrice(priceObj);
             }
 
         }
-        MainUI.hibernateUtil.addPrices(prices);
         return getValues(prices);
     }
 

@@ -5,11 +5,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 @Entity(name = "price")
 public class Price {
     @Id
-    @Column(name = "id")
+    @Column(name = "id", unique = false, nullable = false)
     private int priceId;
     @Column(name = "price")
     private double price;

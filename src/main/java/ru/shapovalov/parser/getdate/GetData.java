@@ -58,7 +58,6 @@ public class GetData {
             response.append(line);
         }
         rd.close();
-        System.out.println(response.toString());
         return response.toString();
     }
 }

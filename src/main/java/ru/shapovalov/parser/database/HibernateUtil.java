@@ -2,10 +2,7 @@ package ru.shapovalov.parser.database;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 import com.vaadin.server.VaadinService;
 
@@ -14,10 +11,8 @@ import ru.shapovalov.parser.dao.Price;
 import ru.shapovalov.parser.dao.Product;
 import ru.shapovalov.parser.dao.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.Query;
+import javax.management.ObjectName;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
 
@@ -105,9 +100,15 @@ public class HibernateUtil {
         if (!priceList.isEmpty()) {
             for (Object price : priceList) {
                 if (id == ((Price) price).getPriceId()) {
-                    query = em.createQuery("SELECT  p FROM Price p WHERE p.id =" + id);
+                    query = em.createQuery("FROM price  WHERE id =" + id);
+                    List<Price> prices = (List<Price>) query.getResultList();
                     em.close();
-                    return (Collection<Price>) query.getResultList();
+                    Collections.sort(prices, new Comparator<Price>() {
+                        public int compare(Price o1, Price o2) {
+                            return o1.getDate().compareTo(o2.getDate());
+                        }
+                    });
+                    return prices;
                 }
             }
         }
@@ -121,6 +122,41 @@ public class HibernateUtil {
             em.persist(price);
         em.getTransaction().commit();
         em.close();
+    }
+
+    public void addPrice(Price price) {
+        EntityManager em = getEm();
+        em.getTransaction().begin();
+        em.persist(price);
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public void removePrices(int id, Date date) {
+        EntityManager em = getEm();
+        em.getTransaction().begin();
+        Query query = em
+                .createQuery("DELETE FROM price WHERE id = :id and date = :date");
+        query.setParameter("id", id);
+        query.setParameter("date", date);
+        query.executeUpdate();
+        em.getTransaction().commit();
+        em.close();
+    }
+
+    public boolean updatePrice(Price price) {
+        EntityManager em = getEm();
+        em.getTransaction().begin();
+        Query query = em
+                .createQuery("UPDATE PRICE price SET price.price = :price "
+                        + "WHERE price.id= :id and price.date = :date");
+        query.setParameter("price", price.getPrice());
+        query.setParameter("id", price.getPriceId());
+        query.setParameter("date", price.getDate());
+        query.executeUpdate();
+        em.getTransaction().commit();
+        em.close();
+        return true;
     }
 
     public boolean updateUser(User user) {
