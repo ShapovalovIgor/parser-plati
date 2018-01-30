@@ -96,7 +96,7 @@ public class ParserStrings {
                         }
                     }
                 }
-//                break; (test break scan 1 page)
+                break;// (test break scan 1 page)
 
             }
         } catch (Exception e) {
