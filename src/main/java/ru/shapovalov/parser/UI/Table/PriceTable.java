@@ -2,22 +2,13 @@ package ru.shapovalov.parser.UI.Table;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.icons.VaadinIcons;
-import com.vaadin.server.Sizeable;
 import com.vaadin.ui.*;
-import com.vaadin.ui.components.grid.HeaderCell;
-import com.vaadin.ui.components.grid.HeaderRow;
-import com.vaadin.ui.renderers.HtmlRenderer;
 import com.vaadin.ui.renderers.NumberRenderer;
 import com.vaadin.ui.renderers.TextRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.grid.cellrenderers.view.SparklineRenderer;
-import org.vaadin.sparklines.Sparklines;
-import ru.shapovalov.parser.dao.Product;
-import ru.shapovalov.parser.parsing.ParserStrings;
+import ru.shapovalov.parser.DAO.Product;
 
-import javax.annotation.PostConstruct;
-import javax.persistence.criteria.CriteriaBuilder;
-import java.lang.reflect.Array;
 import java.util.*;
 @Theme(ValoTheme.THEME_NAME)
 public class PriceTable extends Grid<Product> {

@@ -1,12 +1,10 @@
-package ru.shapovalov.parser.dao;
+package ru.shapovalov.parser.DAO;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
 @Entity(name = "price")
-public class Price {
+public class PriceDAO {
     @Id
     @Column(name = "id", unique = false, nullable = false)
     private int priceId;
@@ -15,17 +13,17 @@ public class Price {
     @Column(name = "date")
     private Date date;
 
-    public Price(int priceId) {
+    public PriceDAO(int priceId) {
         this.priceId = priceId;
         this.date = null;
 
     }
 
-    public Price() {
+    public PriceDAO() {
 
     }
 
-    public Price(int priceId, double price, Date date) {
+    public PriceDAO(int priceId, double price, Date date) {
         this.priceId = priceId;
         this.price = price;
         this.date = date;

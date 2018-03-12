@@ -5,8 +5,8 @@ http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
              version="2.1">
 
     <persistence-unit name="item-manager-pu" transaction-type="RESOURCE_LOCAL">
-        <class>ru.shapovalov.parser.dao.Product</class>
-        <class>ru.shapovalov.parser.dao.User</class>
+        <class>ru.shapovalov.parser.DAO.Product</class>
+        <class>ru.shapovalov.parser.DAO.User</class>
         <properties>
             <property name="javax.persistence.jdbc.url"
                       value="jdbc:hsqldb:file:\databases\DB;hsqldb.lock_file=false;hsqldb.sqllog=3;shutdown=true;syntax_ora=true"/>

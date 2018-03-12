@@ -1,4 +1,4 @@
-package ru.shapovalov.parser.dao;
+package ru.shapovalov.parser.DAO;
 
 import javax.persistence.*;
 import java.util.Collection;

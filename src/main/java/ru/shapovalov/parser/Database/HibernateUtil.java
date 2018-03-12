@@ -1,4 +1,4 @@
-package ru.shapovalov.parser.database;
+package ru.shapovalov.parser.Database;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -7,11 +7,10 @@ import java.util.*;
 import com.vaadin.server.VaadinService;
 
 import ru.shapovalov.parser.Constants;
-import ru.shapovalov.parser.dao.Price;
-import ru.shapovalov.parser.dao.Product;
-import ru.shapovalov.parser.dao.User;
+import ru.shapovalov.parser.DAO.PriceDAO;
+import ru.shapovalov.parser.DAO.Product;
+import ru.shapovalov.parser.DAO.User;
 
-import javax.management.ObjectName;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.transaction.Transactional;
@@ -91,20 +90,20 @@ public class HibernateUtil {
     }
 
 
-    public Collection<Price> getPriceHistory(int id) {
+    public Collection<PriceDAO> getPriceHistory(int id) {
         EntityManager em = getEm();
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery(Price.class);
-        cq.from(Price.class);
+        CriteriaQuery cq = em.getCriteriaBuilder().createQuery(PriceDAO.class);
+        cq.from(PriceDAO.class);
         List priceList = em.createQuery(cq).getResultList();
         Query query = null;
         if (!priceList.isEmpty()) {
             for (Object price : priceList) {
-                if (id == ((Price) price).getPriceId()) {
+                if (id == ((PriceDAO) price).getPriceId()) {
                     query = em.createQuery("FROM price  WHERE id =" + id);
-                    List<Price> prices = (List<Price>) query.getResultList();
+                    List<PriceDAO> prices = (List<PriceDAO>) query.getResultList();
                     em.close();
-                    Collections.sort(prices, new Comparator<Price>() {
-                        public int compare(Price o1, Price o2) {
+                    Collections.sort(prices, new Comparator<PriceDAO>() {
+                        public int compare(PriceDAO o1, PriceDAO o2) {
                             return o1.getDate().compareTo(o2.getDate());
                         }
                     });
@@ -115,16 +114,16 @@ public class HibernateUtil {
         return null;
     }
 
-    public void addPrices(Collection<Price> priceCollection) {
+    public void addPrices(Collection<PriceDAO> priceCollection) {
         EntityManager em = getEm();
         em.getTransaction().begin();
-        for (Price price : priceCollection)
+        for (PriceDAO price : priceCollection)
             em.persist(price);
         em.getTransaction().commit();
         em.close();
     }
 
-    public void addPrice(Price price) {
+    public void addPrice(PriceDAO price) {
         EntityManager em = getEm();
         em.getTransaction().begin();
         em.persist(price);
@@ -144,11 +143,11 @@ public class HibernateUtil {
         em.close();
     }
 
-    public boolean updatePrice(Price price) {
+    public boolean updatePrice(PriceDAO price) {
         EntityManager em = getEm();
         em.getTransaction().begin();
         Query query = em
-                .createQuery("UPDATE PRICE price SET price.price = :price "
+                .createQuery("UPDATE price price SET price.price = :price "
                         + "WHERE price.id= :id and price.date = :date");
         query.setParameter("price", price.getPrice());
         query.setParameter("id", price.getPriceId());

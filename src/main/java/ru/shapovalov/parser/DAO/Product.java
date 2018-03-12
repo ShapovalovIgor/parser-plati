@@ -1,9 +1,6 @@
-package ru.shapovalov.parser.dao;
+package ru.shapovalov.parser.DAO;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
 
 @Entity(name = "product")
 public class Product {
