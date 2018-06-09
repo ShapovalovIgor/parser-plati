@@ -6,10 +6,11 @@ import java.util.*;
 
 import com.vaadin.server.VaadinService;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.shapovalov.parser.Constants;
 import ru.shapovalov.parser.DAO.PriceDAO;
 import ru.shapovalov.parser.DAO.Product;
-import ru.shapovalov.parser.DAO.User;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
@@ -20,7 +21,7 @@ public class HibernateUtil {
     }
 
     private static final String PERSISTENT_UNIT_NAME = "item-manager-pu";
-
+    private static final Log LOG = LogFactory.getLog(DataBaseProcessor.class);
     private static final EntityManagerFactory emf;
 
     static {
@@ -77,16 +78,6 @@ public class HibernateUtil {
         List productList = em.createQuery(cq).getResultList();
         em.close();
         return productList;
-    }
-
-
-    public List<User> getUser() {
-        EntityManager em = getEm();
-        CriteriaQuery cq = em.getCriteriaBuilder().createQuery(User.class);
-        cq.from(User.class);
-        List userList = em.createQuery(cq).getResultList();
-        em.close();
-        return userList;
     }
 
 
@@ -158,15 +149,6 @@ public class HibernateUtil {
         return true;
     }
 
-    public boolean updateUser(User user) {
-        EntityManager em = getEm();
-        em.getTransaction().begin();
-        em.merge(user);
-        em.getTransaction().commit();
-        em.close();
-        return true;
-    }
-
     public void addProducts(Collection<Product> productList) {
         EntityManager em = getEm();
         em.getTransaction().begin();
@@ -177,10 +159,13 @@ public class HibernateUtil {
     }
 
     public void addProducts(Collection<Product> productList, Set<Integer> userIdList) {
+        if(LOG.isDebugEnabled())
+            LOG.debug("add Product list size:" + productList.size() + "user list size:" + userIdList.size());
         Collection oldProduct = getProduct();
         productList.removeAll(oldProduct);
-        if (productList.isEmpty()) {
-            addUsers(userIdList);
+        if(LOG.isDebugEnabled())
+            LOG.debug("List old size:" + oldProduct.size() + "List new size:" + productList.size());
+        if (!productList.isEmpty()) {
             EntityManager em = getEm();
             em.getTransaction().begin();
             for (Product product : productList)
@@ -190,23 +175,6 @@ public class HibernateUtil {
         }
     }
 
-    public void addUsers(Set<Integer> userIdList) {
-        Collection oldUser = getUser();
-        userIdList.removeAll(oldUser);
-        if (userIdList.isEmpty()) {
-            EntityManager em = getEm();
-            em.getTransaction().begin();
-
-            for (Integer userId : userIdList) {
-                User user = new User(userId);
-
-                em.persist(user);
-            }
-            if (userIdList.isEmpty())
-                em.getTransaction().commit();
-            em.close();
-        }
-    }
 
     public boolean createDB() {
         try {

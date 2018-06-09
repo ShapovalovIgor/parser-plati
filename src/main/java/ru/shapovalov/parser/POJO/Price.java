@@ -1,11 +1,10 @@
 package ru.shapovalov.parser.POJO;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 
 @XmlRootElement(name = "row")
 public class Price {
+
     private int idGoods;
     private String name;
     private Double price;
@@ -13,42 +12,34 @@ public class Price {
     private int cntGoodResponses;
     private int cntBadResponses;
     private int idSellerInt;
-
-    @XmlAttribute(name = "id_goods")
     public int getIdGoods() {
         return idGoods;
     }
-
-    @XmlAttribute(name = "name_goods")
+    @XmlElement(name = "name_goods")
     public String getName() {
         return name;
     }
-
-    @XmlAttribute(name = "price")
+    @XmlElement(name = "price")
     public Double getPrice() {
         return price;
     }
-
-    @XmlAttribute(name = "cnt_sell")
+    @XmlElement(name = "cnt_sell")
     public int getCntSell() {
         return cntSell;
     }
-
-    @XmlAttribute(name = "cnt_goodresponses")
+    @XmlElement(name = "cnt_goodresponses")
     public int getCntGoodResponses() {
         return cntGoodResponses;
     }
-
-    @XmlAttribute(name = "cnt_badresponses")
+    @XmlElement(name = "cnt_badresponses")
     public int getCntBadResponses() {
         return cntBadResponses;
     }
-
-    @XmlAttribute(name = "id_seller")
+    @XmlElement(name = "id_seller")
     public int getIdSellerInt() {
         return idSellerInt;
     }
-
+    @XmlElement(name = "id_goods")
     public void setIdGoods(int idGoods) {
         this.idGoods = idGoods;
     }

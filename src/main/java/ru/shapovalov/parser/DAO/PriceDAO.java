@@ -9,7 +9,7 @@ public class PriceDAO {
     @Column(name = "id", unique = false, nullable = false)
     private int priceId;
     @Column(name = "price")
-    private double price;
+    private Double price;
     @Column(name = "date")
     private Date date;
 
@@ -23,17 +23,17 @@ public class PriceDAO {
 
     }
 
-    public PriceDAO(int priceId, double price, Date date) {
+    public PriceDAO(int priceId, Double price, Date date) {
         this.priceId = priceId;
         this.price = price;
         this.date = date;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

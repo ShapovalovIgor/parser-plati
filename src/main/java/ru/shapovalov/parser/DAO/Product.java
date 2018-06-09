@@ -25,6 +25,9 @@ public class Product {
     @Column(name = "type_product")
     private int type;
 
+    public Product() {
+    }
+
     public Product(int idGoods, String nameGoods, Double[] prices, int cntSell, int cntGoodResponses, int cntBadResponses, int idSeller, int type) {
         this.idGoods = idGoods;
         this.nameGoods = nameGoods;

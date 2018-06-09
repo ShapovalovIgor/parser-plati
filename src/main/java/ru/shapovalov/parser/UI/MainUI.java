@@ -1,24 +1,31 @@
 package ru.shapovalov.parser.UI;
 
 import com.vaadin.annotations.Theme;
-import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
-import ru.shapovalov.parser.UI.Table.PriceTable;
-import ru.shapovalov.parser.Database.HibernateUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.shapovalov.parser.Database.DataBaseProcessor;
-
-import java.util.Collection;
 
 @SuppressWarnings("serial")
 @Theme("vaadinbutton")
 public class MainUI extends UI {
-    public static HibernateUtil hibernateUtil;
+    private static final Log LOG = LogFactory.getLog(MainUI.class);
+
     @Override
     protected void init(VaadinRequest request) {
+        if(LOG.isDebugEnabled())
+        LOG.debug("Start UI 123 \n\n");
+
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         layout.setMargin(true);
+
+        Notification.show("New information:",
+                "Please wait a few minutes.",
+                Notification.Type.HUMANIZED_MESSAGE);
+
+
         DataBaseProcessor dataBaseProcessor = new DataBaseProcessor();
         dataBaseProcessor.processor(layout);
         TabSheet tabs = new TabSheet();

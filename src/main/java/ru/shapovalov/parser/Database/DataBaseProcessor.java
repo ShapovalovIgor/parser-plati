@@ -1,14 +1,12 @@
 package ru.shapovalov.parser.Database;
 
-import com.vaadin.server.Page;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
-import ru.shapovalov.parser.ConcurrentComponent;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.shapovalov.parser.DAO.PriceDAO;
 import ru.shapovalov.parser.DAO.Product;
 import ru.shapovalov.parser.REST.ManagerREST;
 import ru.shapovalov.parser.REST.ManagerRESTImpl;
-import ru.shapovalov.parser.UI.MainUI;
 import ru.shapovalov.parser.POJO.Price;
 import ru.shapovalov.parser.UI.Table.PriceTable;
 
@@ -16,77 +14,87 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class DataBaseProcessor extends ConcurrentComponent {
-    private HibernateUtil hibernateUtil;
-
-    public DataBaseProcessor() {
-        this.hibernateUtil = new HibernateUtil();
-    }
-
+public class DataBaseProcessor extends HibernateUtil {
+    private static final Log LOG = LogFactory.getLog(DataBaseProcessor.class);
     public static boolean statusDB = false;
 
     public void processor(VerticalLayout layout) {
-        hibernateUtil = new HibernateUtil();
-        Collection product = hibernateUtil.getProduct();
+        if (LOG.isDebugEnabled())
+            LOG.debug("Start processor DB");
+        Collection product = getProduct();
+        if (LOG.isDebugEnabled())
+            LOG.debug("Product size:" + product.size());
         if (null == product
                 || product.isEmpty()) {
-            startProcessor(layout);
+            startProcessor();
             while (!DataBaseProcessor.statusDB) {
             }
             DataBaseProcessor.statusDB = false;
-            product = hibernateUtil.getProduct();
+            product = getProduct();
             PriceTable priceTable = new PriceTable(product);
-            layout.addComponent(priceTable);
+            layout.addComponent(priceTable);//требуется переместить в метод startProcessor()
         } else {
+            if (LOG.isDebugEnabled())
+                LOG.debug("Product not null:" + product.size());
             PriceTable priceTable = new PriceTable(product);
             layout.addComponent(priceTable);
-            startProcessor(layout);
+            startProcessor();
         }
 
     }
 
-    private void startProcessor(VerticalLayout layout) {
-        executeUpdate(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    ManagerRESTImpl managerREST = new ManagerREST();
-                    Set pricesSet = managerREST.getPrice();
-                    List productList = new ArrayList<Product>(pricesSet.size());
-                    Set userId = new HashSet<Integer>();
-                    for (Object priceObj : pricesSet) {
-                        int idGoods = ((Price) priceObj).getIdGoods();
-                        String name = ((Price) priceObj).getName();
-                        Double price = ((Price) priceObj).getPrice();
-                        Double[] prices = updatePrice(idGoods, price);
-                        int cntSell = ((Price) priceObj).getCntSell();
-                        int cntGoodResponses = ((Price) priceObj).getCntGoodResponses();
-                        int cntBadResponses = ((Price) priceObj).getCntBadResponses();
-                        int sellerId = ((Price) priceObj).getIdSellerInt();
-                        userId.add(sellerId);
-                        Product product = new Product(idGoods, name, prices, cntSell, cntGoodResponses, cntBadResponses, sellerId, 0);
-                        productList.add(product);
-                    }
-                    hibernateUtil.addProducts(productList, userId);
-                    statusDB = true;
-                    Collection product = hibernateUtil.getProduct();
-                    PriceTable priceTable = new PriceTable(product);
-                    layout.addComponent(priceTable);
+    private void startProcessor() {
+        if (LOG.isDebugEnabled())
+            LOG.debug("Start processor");
+        while (true) {
+            ManagerRESTImpl managerREST = new ManagerREST();
+            Set pricesSet = managerREST.getPrice();
+            List productList = new ArrayList<Product>(pricesSet.size());
+            Set userId = new HashSet<Integer>();
+            if (LOG.isDebugEnabled())
+                LOG.debug("Price size:" + pricesSet.size());
+            for (Object priceObj : pricesSet) {
+                int idGoods = ((Price) priceObj).getIdGoods();
+                String name = ((Price) priceObj).getName();
+                Double price = ((Price) priceObj).getPrice();
+                if (idGoods != 0 && price != null) {
+                    Double[] prices = updatePrice(idGoods, price);
+                    int cntSell = ((Price) priceObj).getCntSell();
+                    int cntGoodResponses = ((Price) priceObj).getCntGoodResponses();
+                    int cntBadResponses = ((Price) priceObj).getCntBadResponses();
+                    int sellerId = ((Price) priceObj).getIdSellerInt();
+                    userId.add(sellerId);
+                    Product product = new Product(idGoods, name, prices, cntSell, cntGoodResponses, cntBadResponses, sellerId, 0);
+                    productList.add(product);
+                    if (LOG.isDebugEnabled())
+                        LOG.debug("Start Processor add product and id:" + product.getIdGoods());
                 }
             }
-        });
+
+            addProducts(productList, userId);
+            if (LOG.isDebugEnabled())
+                LOG.debug("Add prod");
+            statusDB = true;
+
+            if (LOG.isDebugEnabled())
+                LOG.debug("Start processor exit");
+            break;
+        }
     }
 
 
     private Double[] updatePrice(int id, Double price) {
-        List<PriceDAO> prices = (List<PriceDAO>) MainUI.hibernateUtil.getPriceHistory(id);
+        if (LOG.isDebugEnabled())
+            LOG.debug("Update price id:" + id + " Price:" + price);
+        List<PriceDAO> prices = (List<PriceDAO>) getPriceHistory(id);
         if (prices == null
                 || prices.isEmpty()) {
             PriceDAO priceObj = new PriceDAO(id, price, getDate());
             prices = new ArrayList<>();
             prices.add(priceObj);
-            System.out.println("***add price***size:" + prices.size() + " id:" + id);
-            MainUI.hibernateUtil.addPrice(priceObj);
+            if (LOG.isDebugEnabled())
+                LOG.debug("***add price***size:" + prices.size() + " id:" + id);
+            addPrice(priceObj);
         } else {
             Date date = getDate();
             PriceDAO priceTmp = null;
@@ -94,8 +102,9 @@ public class DataBaseProcessor extends ConcurrentComponent {
                 if (priceObj.getDate().equals(date)) {
                     priceObj.setPrice(price);
                     priceTmp = priceObj;
-                    MainUI.hibernateUtil.updatePrice(priceObj);
-                    System.out.println("***update price***");
+                    updatePrice(priceObj);
+                    if (LOG.isDebugEnabled())
+                        LOG.debug("***update price***");
                 }
             }
             if (priceTmp != null) {
@@ -105,20 +114,24 @@ public class DataBaseProcessor extends ConcurrentComponent {
             if (prices.size() == 30) {
                 PriceDAO priceObj = new PriceDAO(id, price, getDate());
                 prices = addElement(prices, priceObj);
-                MainUI.hibernateUtil.removePrices(id, prices.get(0).getDate());
-                System.out.println("***remove price30***");
+                removePrices(id, prices.get(0).getDate());
+                if (LOG.isDebugEnabled())
+                    LOG.debug("***remove price30***");
 
-                MainUI.hibernateUtil.addPrice(priceObj);
+                addPrice(priceObj);
 
             } else {
                 PriceDAO priceObj = new PriceDAO(id, price, getDate());
                 prices.add(priceObj);
-                MainUI.hibernateUtil.removePrices(id, prices.get(0).getDate());
-                System.out.println("***remove price***");
-                MainUI.hibernateUtil.addPrice(priceObj);
+                removePrices(id, prices.get(0).getDate());
+                if (LOG.isDebugEnabled())
+                    LOG.debug("***remove price*** priceObj id:" + priceObj.getPriceId());
+                addPrice(priceObj);
             }
 
         }
+        if (LOG.isDebugEnabled())
+            LOG.debug("return: size:" + prices.size() + " values:" + prices.toArray());
         return getValues(prices);
     }
 
@@ -136,16 +149,20 @@ public class DataBaseProcessor extends ConcurrentComponent {
         }
     }
 
-    private Double[] getValues(List list) {
+    private Double[] getValues(List<PriceDAO> list) {
+        if (LOG.isDebugEnabled())
+            LOG.debug("Start get value");
         if (list != null) {
             int length = list.size();
             Double[] temp = new Double[length];
             for (int elemNum = 0; elemNum < length; elemNum++) {
-                Price price = (Price) list.get(elemNum);
+                PriceDAO price = list.get(elemNum);
                 temp[elemNum] = price.getPrice();
             }
             return temp;
         } else {
+            if (LOG.isDebugEnabled())
+                LOG.debug("Get value return null");
             return null;
         }
     }

@@ -1,7 +1,3 @@
-CREATE TABLE user (
-  id BIGINT NOT NULL,
-  PRIMARY KEY (id)
-);
 CREATE TABLE price (
   id BIGINT NOT NULL,
   price DOUBLE(50) DEFAULT NULL,

@@ -1,6 +1,8 @@
 package ru.shapovalov.parser.REST;
 
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import ru.shapovalov.parser.Constants;
 import ru.shapovalov.parser.POJO.*;
 
@@ -16,10 +18,13 @@ import java.io.*;
 import java.util.*;
 
 public class ManagerREST implements ManagerRESTImpl {
+    private static final Log LOG = LogFactory.getLog(ManagerREST.class);
 
     @Override
     public Set getPrice() {
         try {
+            if (LOG.isDebugEnabled())
+                LOG.debug("Start getPrice");
             JAXBContext jaxbContext = JAXBContext.newInstance(RequestSection.class);
             Marshaller marshaller = jaxbContext.createMarshaller();
             RequestSection requestSection = new RequestSection();
@@ -37,8 +42,10 @@ public class ManagerREST implements ManagerRESTImpl {
             SectionList sessionList = (SectionList) unmarshaller.unmarshal(stringReader);
             return getPrice(sessionList.getSectionList());
         } catch (JAXBException e) {
-            System.out.println("Method getPrice fall exception.");
+            LOG.error("Method getPrice fall exception.", e);
         }
+        if (LOG.isDebugEnabled())
+            LOG.debug("Method getPrice return null.");
         return null;
     }
 
@@ -50,10 +57,14 @@ public class ManagerREST implements ManagerRESTImpl {
     }
 
     private static Set getPrice(List<Section> list) throws JAXBException {
+        if (LOG.isDebugEnabled())
+            LOG.debug("Start getPrice for list");
         JAXBContext jaxbContext = JAXBContext.newInstance(RequestPrice.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         Set price = new HashSet();
-        for (int i = 0; i < 6; i++) {
+//        for (int i = 0; i < 10; i++) {//Это костыль из-за кривого API (Почему то не все позиции приходят по запросу +-20 теряются (в планах написать в поддержку)
+//            if (LOG.isDebugEnabled())
+//                LOG.debug("getPrice Step num: " + i);
             for (Section section : list) {
                 int sectionId = section.getSection_id();
                 int countPages = section.getPageCount();
@@ -76,7 +87,9 @@ public class ManagerREST implements ManagerRESTImpl {
                     price.addAll(priceList.getPriceList());
                 }
             }
-        }
+//        }
+        if (LOG.isDebugEnabled())
+            LOG.debug("End getPrice for list");
         return price;
     }
 }
