@@ -44,42 +44,47 @@ public class DataBaseProcessor extends HibernateUtil {
     }
 
     private void startProcessor() {
-        if (LOG.isDebugEnabled())
-            LOG.debug("Start processor");
-        while (true) {
-            ManagerRESTImpl managerREST = new ManagerREST();
-            Set pricesSet = managerREST.getPrice();
-            List productList = new ArrayList<Product>(pricesSet.size());
-            Set userId = new HashSet<Integer>();
-            if (LOG.isDebugEnabled())
-                LOG.debug("Price size:" + pricesSet.size());
-            for (Object priceObj : pricesSet) {
-                int idGoods = ((Price) priceObj).getIdGoods();
-                String name = ((Price) priceObj).getName();
-                Double price = ((Price) priceObj).getPrice();
-                if (idGoods != 0 && price != null) {
-                    Double[] prices = updatePrice(idGoods, price);
-                    int cntSell = ((Price) priceObj).getCntSell();
-                    int cntGoodResponses = ((Price) priceObj).getCntGoodResponses();
-                    int cntBadResponses = ((Price) priceObj).getCntBadResponses();
-                    int sellerId = ((Price) priceObj).getIdSellerInt();
-                    userId.add(sellerId);
-                    Product product = new Product(idGoods, name, prices, cntSell, cntGoodResponses, cntBadResponses, sellerId, 0);
-                    productList.add(product);
+        new Runnable() {
+            @Override
+            public void run() {
+                if (LOG.isDebugEnabled())
+                    LOG.debug("Start processor");
+                while (true) {
+                    ManagerRESTImpl managerREST = new ManagerREST();
+                    Set pricesSet = managerREST.getPrice();
+                    List productList = new ArrayList<Product>(pricesSet.size());
+                    Set userId = new HashSet<Integer>();
                     if (LOG.isDebugEnabled())
-                        LOG.debug("Start Processor add product and id:" + product.getIdGoods());
+                        LOG.debug("Price size:" + pricesSet.size());
+                    for (Object priceObj : pricesSet) {
+                        int idGoods = ((Price) priceObj).getIdGoods();
+                        String name = ((Price) priceObj).getName();
+                        Double price = ((Price) priceObj).getPrice();
+                        if (idGoods != 0 && price != null) {
+                            Double[] prices = updatePrice(idGoods, price);
+                            int cntSell = ((Price) priceObj).getCntSell();
+                            int cntGoodResponses = ((Price) priceObj).getCntGoodResponses();
+                            int cntBadResponses = ((Price) priceObj).getCntBadResponses();
+                            int sellerId = ((Price) priceObj).getIdSellerInt();
+                            userId.add(sellerId);
+                            Product product = new Product(idGoods, name, prices, cntSell, cntGoodResponses, cntBadResponses, sellerId, 0);
+                            productList.add(product);
+                            if (LOG.isDebugEnabled())
+                                LOG.debug("Start Processor add product and id:" + product.getIdGoods());
+                        }
+                    }
+
+                    addProducts(productList, userId);
+                    if (LOG.isDebugEnabled())
+                        LOG.debug("Add prod");
+                    statusDB = true;
+
+                    if (LOG.isDebugEnabled())
+                        LOG.debug("Start processor exit");
+                    break;
                 }
             }
-
-            addProducts(productList, userId);
-            if (LOG.isDebugEnabled())
-                LOG.debug("Add prod");
-            statusDB = true;
-
-            if (LOG.isDebugEnabled())
-                LOG.debug("Start processor exit");
-            break;
-        }
+        };
     }
 
 
